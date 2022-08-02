@@ -17,7 +17,7 @@ class VKphoto:
                   'v': self.version,
                   'user_id': self.id,
                   'album_id': 'profile',
-                  'extended': 1
+                  'extended': 1,
                   }
         response = requests.get(self.url + 'photos.get', params).json()
         dict_photo = {}
@@ -62,7 +62,7 @@ class YAuploader:
         upload_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload'
         self.ya_folder()
         headers = self.get_headers()
-        progress_bar = 1
+        progress_bar = 0
         for photo in file:
             params = {'url': file[photo][0], 'path': f'photos/{photo}.jpg'}
             response = requests.post(upload_url, headers=headers, params=params)
@@ -74,6 +74,6 @@ class YAuploader:
 
 
 if __name__ == '__main__':
-    id_vk = VKphoto(str(input('id пользователя VK: ')))
+    id = VKphoto(str(input('id пользователя VK: ')))
     token = YAuploader(str(input('токен с Полигона Яндекс Диска: ')))
-    print(token.get_upload(id_vk.user_photo()))
+    print(token.get_upload(id.user_photo()))
