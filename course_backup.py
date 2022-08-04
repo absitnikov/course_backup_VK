@@ -21,6 +21,12 @@ class VKphoto:
                   'count': count
                   }
         response = requests.get(self.url + 'photos.get', params).json()
+        status_code = requests.get(self.url + 'photos.get', params).status_code
+        if status_code == 200:
+            print(f'server ok {status_code} \n')
+        elif status_code >= 400:
+            print(f'Ошибка {status_code} \n')
+
         dict_photo = {}
         for photo in response['response']['items']:
             if str(photo['likes']['count']) not in dict_photo:
@@ -68,9 +74,12 @@ class YAuploader:
             params = {'url': file[photo][0], 'path': f'photos/{photo}.jpg'}
             response = requests.post(upload_url, headers=headers, params=params)
             print(
-                f'upload {progress_bar} photo from {len(file)} ****** response from server ****** {response.status_code}')
+                f'upload {progress_bar} photo from {len(file)} *** response from server *** {response.status_code}')
             progress_bar += 1
-        print('photos uploaded \n')
+            if 200 <= response.status_code < 400:
+                print('photos uploaded \n')
+            elif response.status_code >= 400:
+                print(f'Ошибка {response.status_code}')
         return self.json_file(file)
 
 
